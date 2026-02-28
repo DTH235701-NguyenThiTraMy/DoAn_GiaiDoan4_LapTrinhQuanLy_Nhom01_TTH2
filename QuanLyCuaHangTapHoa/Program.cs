@@ -28,53 +28,23 @@ namespace QuanLyCuaHangTapHoa
             //Application.Run(new Forms.frmMain());
 
             // ====== SEED ADMIN ======
-            //try
-            //{
-            //    using (var db = new QLTHContext())
-            //    {
-            //        db.Database.EnsureCreated();
-            //        if (!db.NhanVien.Any())
-            //        {
-            //            db.NhanVien.Add(new NhanVien
-            //            {
-            //                HoTen = "Quản Trị Viên",
-            //                TenDangNhap = "admin",
-            //                SoDienThoai = "0123456789",
-            //                MatKhau = BCrypt.Net.BCrypt.HashPassword("admin123"),
-            //                QuyenHan = true
-            //            });
-            //            db.SaveChanges();
-            //        }
-            //    }
-            //}
-            //catch
-            //{
-            //    MessageBox.Show("Không thể kết nối CSDL!", "Lỗi");
-            //    return;
-            //}
-            //// ========================
-
-            //// ====== LOGIN LOOP ======
-            //while (true)
-            //{
-            //    frmDangNhap login = new frmDangNhap();
-
-            //    // Thoát login → thoát app
-            //    if (login.ShowDialog() != DialogResult.OK)
-            //        break;
-
-            //    // Đăng nhập OK → vào Main
-            //    Application.Run(new frmMain());
-
-            //    // Khi frmMain đóng (đăng xuất)
-            //    nvDangNhap = null;
-            //}
-            // ========================
             try
             {
                 using (var db = new QLTHContext())
                 {
                     db.Database.EnsureCreated();
+                    if (!db.NhanVien.Any())
+                    {
+                        db.NhanVien.Add(new NhanVien
+                        {
+                            HoTen = "Quản Trị Viên",
+                            TenDangNhap = "admin",
+                            SoDienThoai = "0123456789",
+                            MatKhau = BCrypt.Net.BCrypt.HashPassword("admin123"),
+                            QuyenHan = true
+                        });
+                        db.SaveChanges();
+                    }
                 }
             }
             catch
@@ -82,9 +52,25 @@ namespace QuanLyCuaHangTapHoa
                 MessageBox.Show("Không thể kết nối CSDL!", "Lỗi");
                 return;
             }
+            // ========================
 
-            // 🔥 Chạy thẳng form hóa đơn
-            Application.Run(new frmHoaDon());
+            // ====== LOGIN LOOP ======
+            while (true)
+            {
+                frmDangNhap login = new frmDangNhap();
+
+                // Thoát login → thoát app
+                if (login.ShowDialog() != DialogResult.OK)
+                    break;
+
+                // Đăng nhập OK → vào Main
+                Application.Run(new frmMain());
+
+                // Khi frmMain đóng (đăng xuất)
+                nvDangNhap = null;
+            }
+            // ========================
+
             Application.Exit();
         }
     }
